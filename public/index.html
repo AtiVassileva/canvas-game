@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>Игра с фигури</title>
+</head>
+
+<body>
+    <div class="container">
+        <div id="auth-container">
+            <h1>Игра с фигури</h1>
+            <form id="auth-form">
+                <input type="text" id="username" placeholder="Потребителско име" required>
+                <input type="password" id="password" placeholder="Парола" required>
+                <button type="button" id="register-btn">Регистрация</button>
+                <button type="button" id="login-btn">Вход</button>
+            </form>
+            <p id="auth-message"></p>
+        </div>
+
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+    </div>
+    <script src="./game.js"></script>
+</body>
+
+</html>

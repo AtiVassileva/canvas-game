@@ -17,7 +17,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.post('/register', (req, res) => {
   const { username, password } = req.body;
   if (users.find(user => user.username === username)) {
-    return res.status(400).json({ message: 'Потребителското име вече съществува' });
+    return res.status(400).json({ message: 'Потребителското име вече съществува!' });
   }
   users.push({ username, password });
   res.status(200).json({ message: 'Регистрацията е успешна!' });
@@ -27,7 +27,7 @@ app.post('/login', (req, res) => {
   const { username, password } = req.body;
   const user = users.find(user => user.username === username && user.password === password);
   if (!user) {
-    return res.status(401).json({ message: 'Грешно потребителско име или парола' });
+    return res.status(401).json({ message: 'Грешно потребителско име или парола!' });
   }
   res.status(200).json({ message: 'Успешен вход!' });
 });
