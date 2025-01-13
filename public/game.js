@@ -5,6 +5,8 @@ const authMessage = document.getElementById('auth-message');
 const registerBtn = document.getElementById('register-btn');
 const loginBtn = document.getElementById('login-btn');
 
+let socket;
+
 const api = async (endpoint, data) => {
     const res = await fetch(endpoint, {
         method: 'POST',
@@ -12,6 +14,27 @@ const api = async (endpoint, data) => {
         body: JSON.stringify(data),
     });
     return res.json();
+};
+
+const startWebSocket = () => {
+    socket = new WebSocket('ws://localhost:3000');  
+
+    socket.onopen = () => {
+        console.log('Свързан към WebSocket сървъра');
+        socket.send('Потребителят се е свързал');
+    };
+
+    socket.onmessage = (event) => {
+        console.log('Получено съобщение от сървъра: ', event.data);
+    };
+
+    socket.onerror = (error) => {
+        console.error('WebSocket грешка: ', error);
+    };
+
+    socket.onclose = () => {
+        console.log('WebSocket връзката е затворена');
+    };
 };
 
 registerBtn.addEventListener('click', async () => {
@@ -24,7 +47,8 @@ registerBtn.addEventListener('click', async () => {
     if (response.message === 'Регистрацията е успешна!') {
         authMessage.className = 'green-message';
         canvas.style.display = 'block';
-        startGame();
+        startWebSocket(); 
+        startGame();  
     } else {
         authMessage.className = 'red-message';
     }
@@ -38,13 +62,22 @@ loginBtn.addEventListener('click', async () => {
     if (response.message === 'Успешен вход!') {
         authMessage.className = 'green-message';
         canvas.style.display = 'block';
-        startGame();
+        startWebSocket(); 
+        startGame(); 
     } else {
         authMessage.className = 'red-message';
     }
 
     authMessage.textContent = response.message;
 });
+
+const sendMessage = (message) => {
+    if (socket && socket.readyState === WebSocket.OPEN) {
+        socket.send(message);
+    } else {
+        console.error('WebSocket не е свързан');
+    }
+};
 
 const shapes = [
     { x: 50, y: 50, size: 50, color: 'red', type: 'square' },
@@ -162,4 +195,6 @@ function handleClick(event) {
 function startGame() {
     drawShapes();
     canvas.addEventListener('click', handleClick);
+    console.log('Играта започна!');
+    sendMessage('Потребителят започна играта!');
 };
